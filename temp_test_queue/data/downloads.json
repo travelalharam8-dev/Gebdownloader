@@ -1,0 +1,62 @@
+[
+  {
+    "id": "job_1793728929935_390ab157",
+    "url": "https://cdn.test.com/video.mp4",
+    "title": "Test Unit Video",
+    "thumbnail": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=480&q=80",
+    "platform": "Direct Media",
+    "quality": "1080p",
+    "format": "mp4",
+    "status": "completed",
+    "progressPercent": 100,
+    "downloadedBytes": 122971,
+    "totalBytes": 122971,
+    "speedBytesPerSec": 0,
+    "etaSeconds": 0,
+    "currentStage": "Download readiness",
+    "stageIndex": 14,
+    "totalStages": 14,
+    "segments": {
+      "total": 0,
+      "completed": 0,
+      "failed": 0,
+      "retried": 0
+    },
+    "createdAt": 1793728929936,
+    "isStream": false,
+    "outputFilePath": "/app/applet/storage/downloads/Test Unit Video_job_17.mp4",
+    "downloadToken": "7463283ae90e71bc30fb4147333e3b8c7166f83f0e791e2a",
+    "downloadUrl": "/api/download/file/7463283ae90e71bc30fb4147333e3b8c7166f83f0e791e2a",
+    "completedAt": 1793728932725
+  },
+  {
+    "id": "job_1793729177685_2297f7a6",
+    "url": "https://cdn.test.com/video.mp4",
+    "title": "Test Unit Video",
+    "thumbnail": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=480&q=80",
+    "platform": "Direct Media",
+    "quality": "1080p",
+    "format": "mp4",
+    "status": "completed",
+    "progressPercent": 100,
+    "downloadedBytes": 122971,
+    "totalBytes": 122971,
+    "speedBytesPerSec": 0,
+    "etaSeconds": 0,
+    "currentStage": "Download readiness",
+    "stageIndex": 14,
+    "totalStages": 14,
+    "segments": {
+      "total": 0,
+      "completed": 0,
+      "failed": 0,
+      "retried": 0
+    },
+    "createdAt": 1793729177685,
+    "isStream": false,
+    "outputFilePath": "/app/applet/storage/downloads/Test Unit Video_job_17.mp4",
+    "downloadToken": "4cb98baa2b8034e5e223d70b188b262a76bf59180faf7508",
+    "downloadUrl": "/api/download/file/4cb98baa2b8034e5e223d70b188b262a76bf59180faf7508",
+    "completedAt": 1793729180005
+  }
+]

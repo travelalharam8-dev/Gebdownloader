@@ -1,0 +1,1025 @@
+MASTER PROJECT PROMPT — VIDEO DOWNLOADER PRO
+COMPLETE WINDOWS DESKTOP APPLICATION (.EXE)
+VERSION 2.0 — FULL PROJECT SPECIFICATION
+
+==================================================
+1. PROJECT OVERVIEW
+==================================================
+
+Build a complete, professional, modern Windows desktop application named:
+
+VIDEO DOWNLOADER PRO
+
+The final deliverable must be a real Windows application with:
+- VideoDownloaderPro.exe
+- VideoDownloaderPro-Setup.exe
+- Optional portable Windows version.
+- Complete editable source code.
+
+This must be a functional software product, not a visual prototype.
+
+The application must allow users to process and download media only from sources and through methods they own or are explicitly authorized to use.
+
+Supported source categories, subject to official permissions:
+- YouTube videos and playlists through permitted official integrations.
+- Public Facebook videos through authorized integrations.
+- Educational platforms such as Almentor (المنتور), only where official download/export permission exists.
+- Other approved educational platforms.
+- Direct authorized HLS streams.
+- Direct authorized MPEG-DASH streams.
+- Authorized M3U8 and MPD manifests.
+- Authorized sources delivering separate audio and video tracks.
+- Authorized segmented and chunk-based media.
+
+LEGAL REQUIREMENTS:
+Never bypass DRM, encryption, authentication, subscriptions, signed access restrictions, paywalls, or platform security mechanisms.
+Never extract private browser cookies or credentials.
+Never act as an unrestricted proxy for arbitrary URLs.
+Respect copyright, provider terms, and user permissions.
+If a platform does not authorize downloading, report that honestly.
+
+==================================================
+2. SINGLE-FILE FRONTEND REQUIREMENT
+==================================================
+
+The entire frontend must be contained in ONE HTML file:
+
+index.html
+
+It must include:
+- Complete HTML5 document.
+- All CSS inside style tags.
+- All Vanilla JavaScript inside script tags.
+- Dashboard components.
+- Arabic and English translations.
+- RTL and LTR support.
+- Responsive layouts.
+- Animations and transitions.
+- URL input and validation.
+- Video information.
+- Download controls.
+- Playlist interface.
+- Streaming processor interface.
+- Queue management interface.
+- History interface.
+- Settings interface.
+- API communication.
+- Clipboard functionality.
+- Error handling and notifications.
+
+Do not create separate frontend HTML pages, style.css, script.js, app.js, or component files.
+
+Backend, Electron main process, preload scripts, workers, and configuration files must remain separate.
+
+The HTML frontend must be reusable inside the Electron desktop application.
+
+==================================================
+3. MODERN USER INTERFACE
+==================================================
+
+Design a premium professional dashboard.
+
+Visual requirements:
+- Dark theme by default.
+- Purple and blue gradients.
+- Elegant glassmorphism.
+- Rounded cards.
+- Smooth animations.
+- Professional typography.
+- Modern icons.
+- Responsive layouts.
+- Beautiful loading states.
+- Toast notifications.
+- Real progress bars.
+- Empty states.
+- Error states.
+
+Main dashboard sections:
+1. Dashboard.
+2. Video URL input.
+3. Video information.
+4. Download settings.
+5. Playlist manager.
+6. Advanced streaming processor.
+7. Download queue.
+8. Download history.
+9. Application settings.
+
+Support:
+- Windows desktop.
+- Laptop screens.
+- Tablets.
+- Mobile browser preview where applicable.
+
+==================================================
+4. ARABIC AND ENGLISH SUPPORT
+==================================================
+
+Default language: Arabic.
+
+Arabic:
+- Complete RTL layout.
+- Arabic labels.
+- Arabic buttons.
+- Arabic notifications.
+- Arabic error messages.
+- Arabic status descriptions.
+
+English:
+- Complete LTR layout.
+- Correct English alignment.
+- Full translations.
+
+Add a language switcher in the header.
+Change language dynamically without reloading.
+Remember the selected language.
+
+==================================================
+5. SMART URL INPUT AND PLATFORM DETECTION
+==================================================
+
+Implement:
+- Paste URL.
+- Automatic platform detection.
+- URL validation.
+- Source classification.
+- Playlist detection where an approved adapter exists.
+- Supported format detection.
+- Clear validation messages.
+- Loading indicators.
+
+Supported categories:
+- Authorized YouTube integrations.
+- Authorized Facebook integrations.
+- Authorized educational platforms.
+- Direct HLS.
+- Direct MPEG-DASH.
+- Other officially supported integrations.
+
+Never claim universal website support.
+
+==================================================
+6. VIDEO INFORMATION EXTRACTION
+==================================================
+
+Retrieve real backend information:
+- Thumbnail.
+- Title.
+- Duration.
+- Description.
+- Source platform.
+- Available resolutions.
+- Available audio formats.
+- File format.
+- Audio codec.
+- Video codec.
+- Estimated file size when available.
+
+Do not fabricate metadata.
+
+==================================================
+7. VIDEO AND AUDIO DOWNLOAD OPTIONS
+==================================================
+
+Video qualities:
+- 144p.
+- 240p.
+- 360p.
+- 480p.
+- 720p HD.
+- 1080p Full HD.
+- Best available quality.
+
+Formats:
+- MP4.
+- MP3.
+- Original available format.
+
+Audio-only options:
+- MP3.
+- Original available audio format.
+- Supported audio quality options.
+
+Only display options confirmed as available by the backend.
+
+Implement:
+- Start download.
+- Selected quality.
+- Selected format.
+- Actual processing status.
+- Real progress percentage.
+- Actual file size.
+- Error messages for unavailable formats.
+
+==================================================
+8. REAL DOWNLOAD LINKS AND CLIPBOARD
+==================================================
+
+Implement:
+- Copy individual video link.
+- Copy MP3 link.
+- Copy selected quality link.
+- Copy selected playlist links.
+- Copy all eligible playlist links.
+
+Every link must:
+- Be generated by the backend.
+- Be valid and verified.
+- Be temporary and expire securely.
+- Be authorized for the requesting user.
+
+Clipboard functionality:
+- Clipboard API.
+- Fallback where possible.
+- Permission error handling.
+- Success notifications.
+- Count of copied links.
+
+Never generate fake URLs or expose private source URLs.
+
+==================================================
+9. YOUTUBE PLAYLISTS AND BULK PROCESSING
+==================================================
+
+Only implement playlist retrieval through authorized official integrations.
+
+Features:
+- Playlist title.
+- Thumbnail.
+- Total available videos.
+- Video titles.
+- Individual thumbnails.
+- Durations.
+- Processing statuses.
+- Select individual videos.
+- Select all.
+- Deselect all.
+- Download selected.
+- Download all eligible items.
+- One quality for all.
+- Individual quality per video.
+- MP4 output.
+- MP3 output where authorized.
+
+Large playlist support:
+- Pagination.
+- Lazy loading.
+- Background processing.
+- Configurable concurrency.
+
+Playlist progress:
+- Overall percentage.
+- Individual progress.
+- Completed count.
+- Failed count.
+- Pending count.
+- Currently processing item.
+
+==================================================
+10. BULK DOWNLOAD LINK COPYING
+==================================================
+
+Implement three operations:
+
+A. Copy Individual Link.
+B. Copy Selected Links.
+C. Copy All Eligible Links.
+
+Requirements:
+- Generate real links through backend jobs.
+- Verify link validity.
+- Exclude unavailable and failed resources.
+- Put every URL on a separate line.
+- Display copied count.
+- Report failed operations.
+- Process large batches safely.
+- Respect clipboard size limitations.
+
+Additional controls:
+- Copy MP3 links.
+- Copy MP4 links.
+- Select all.
+- Deselect all.
+
+Never include fake, expired, or unverified URLs.
+
+==================================================
+11. ADVANCED EDUCATIONAL VIDEO PROCESSING
+==================================================
+
+THIS IS A CORE PROJECT REQUIREMENT.
+
+Build an extensible educational media processing engine for authorized educational platforms.
+
+Example platform:
+Almentor (المنتور).
+
+The engine must support approved integrations where a platform officially permits media export.
+
+Educational platforms may deliver one lesson using hundreds or thousands of separate media segments.
+
+The application must identify authorized structures such as:
+- HLS master manifests.
+- HLS media manifests.
+- M3U8.
+- MPEG-DASH.
+- MPD.
+- Fragmented MP4.
+- Initialization segments.
+- Segmented video.
+- Segmented audio.
+- Separate audio and video representations.
+- Chunk-based media delivery.
+
+The application must not assume that every educational platform is downloadable.
+
+If official API access or explicit permission is unavailable, display:
+
+"Downloading is not available for this content through the current integration."
+
+==================================================
+12. ADVANCED SEGMENT MANAGEMENT ENGINE
+==================================================
+
+Create a dedicated segment-processing engine.
+
+It must support:
+- Hundreds or thousands of authorized segments.
+- Segment detection.
+- Segment indexing.
+- Segment ordering.
+- Segment downloading.
+- Segment validation.
+- Missing segment detection.
+- Duplicate segment detection.
+- Retry failed segments.
+- Temporary storage.
+- Disk-based processing.
+- Memory-efficient processing.
+- Segment reconstruction.
+- Automatic temporary-file cleanup.
+
+Maintain:
+- Correct segment order.
+- Timestamps.
+- Presentation timing.
+- Initialization information.
+- Track metadata.
+- Audio/video synchronization.
+
+Do not load all media segments into RAM.
+
+Use background workers and streaming file operations.
+
+==================================================
+13. SEPARATE AUDIO AND VIDEO RECONSTRUCTION
+==================================================
+
+Some educational websites deliver audio and video independently.
+
+The application must be capable of processing separate authorized media tracks.
+
+Required operations:
+
+1. Identify available video representations.
+2. Identify corresponding audio representations.
+3. Retrieve permitted video segments.
+4. Retrieve permitted audio segments.
+5. Retrieve permitted initialization segments.
+6. Preserve segment ordering.
+7. Preserve presentation timestamps.
+8. Reconstruct the video track.
+9. Reconstruct the audio track.
+10. Synchronize both tracks.
+11. Merge them using FFmpeg or equivalent.
+12. Validate the final output.
+
+Output:
+- One complete MP4 video when supported.
+- MP3 audio when supported and requested.
+- Original format when appropriate.
+
+The user must never need to manually merge audio and video.
+
+IMPORTANT:
+Do not bypass DRM, encrypted media, authentication, signed restrictions, subscription controls, or any platform security.
+
+==================================================
+14. ONE-CLICK FULL LESSON DOWNLOAD
+==================================================
+
+Add a prominent button:
+
+DOWNLOAD FULL VIDEO
+
+When the user clicks:
+
+1. Validate source URL.
+2. Verify user permission.
+3. Detect approved platform integration.
+4. Retrieve authorized metadata.
+5. Identify media manifests.
+6. Analyze the authorized media structure.
+7. Identify all required video segments.
+8. Identify all required audio segments.
+9. Process segments in correct order.
+10. Retry permitted failed segments.
+11. Reconstruct video.
+12. Reconstruct audio.
+13. Synchronize tracks.
+14. Merge tracks.
+15. Validate the final file.
+16. Generate one secure download resource.
+17. Allow saving one complete file to the computer.
+
+The user must receive one complete lesson file, not hundreds of separate files.
+
+==================================================
+15. ADVANCED STREAMING PROCESSING DASHBOARD
+==================================================
+
+Display the following stages:
+
+- Source validation.
+- Permission verification.
+- Manifest analysis.
+- Stream detection.
+- Video track detection.
+- Audio track detection.
+- Segment processing.
+- Video reconstruction.
+- Audio reconstruction.
+- Audio/video synchronization.
+- Final merging.
+- FFmpeg processing.
+- File validation.
+- Download readiness.
+
+Display real backend values:
+- Total video segments.
+- Total audio segments.
+- Completed segments.
+- Failed segments.
+- Retried segments.
+- Processing speed.
+- Actual progress.
+- Estimated remaining time when reliable.
+- Final file size.
+
+Never simulate progress.
+
+==================================================
+16. DOWNLOAD QUEUE
+==================================================
+
+Implement a persistent backend-managed queue.
+
+Features:
+- Multiple downloads.
+- Playlist jobs.
+- Configurable concurrency.
+- Pending jobs.
+- Processing jobs.
+- Completed jobs.
+- Failed jobs.
+- Retry.
+- Duplicate job prevention.
+- Persistent job state.
+- Recovery after application restart.
+
+Use Redis/BullMQ or an appropriate durable queue.
+
+Provide real-time updates using polling, SSE, or WebSockets.
+
+==================================================
+17. DOWNLOAD HISTORY
+==================================================
+
+Display:
+- Video title.
+- Thumbnail.
+- Platform.
+- Quality.
+- Format.
+- File size.
+- Download date.
+- Processing status.
+
+Actions:
+- Open completed item.
+- Retry eligible failed item.
+- Copy valid download link.
+- Remove history entry.
+
+Do not display expired links as active.
+
+==================================================
+18. BACKEND ARCHITECTURE
+==================================================
+
+Use a modular Node.js backend.
+
+Recommended technologies:
+- Node.js.
+- Express.js.
+- PostgreSQL or SQLite for suitable local persistence.
+- Redis and BullMQ when appropriate.
+- FFmpeg.
+- Secure temporary storage.
+- Platform-specific adapters.
+
+Backend modules:
+- URL validation.
+- Platform detection.
+- Official API integrations.
+- Metadata retrieval.
+- Playlist management.
+- Authorized manifest parsing.
+- Segment processing.
+- Audio/video reconstruction.
+- FFmpeg processing.
+- Queue workers.
+- Download link generation.
+- File validation.
+- Temporary file cleanup.
+
+==================================================
+19. API ENDPOINTS
+==================================================
+
+Implement and document:
+
+POST /api/video/info
+POST /api/playlist/info
+POST /api/download
+POST /api/download/bulk
+POST /api/download-links
+POST /api/playlist/download-links
+
+GET /api/download/status/:id
+GET /api/playlist/status/:id
+GET /api/queue
+GET /api/history
+
+POST /api/download/retry/:id
+
+POST /api/stream/info
+POST /api/stream/process
+GET /api/stream/status/:id
+
+GET /api/health
+
+All implemented endpoints must use real backend functionality.
+
+Use structured JSON responses and correct HTTP status codes.
+
+If an integration is not configured, return an explicit unsupported/not-enabled response. Never return fabricated success.
+
+==================================================
+20. SECURITY
+==================================================
+
+Implement:
+- Server-side URL validation.
+- SSRF protection.
+- Exact domain allowlists.
+- DNS rebinding protection.
+- Private IP blocking.
+- Request rate limiting.
+- Secure CORS.
+- Authentication where necessary.
+- Authorization checks.
+- Secure environment variables.
+- Input validation.
+- File type validation.
+- File size limits.
+- Secure temporary URLs.
+- Expiration and revocation.
+- Temporary storage cleanup.
+- Worker isolation.
+- FFmpeg sandboxing.
+- Egress restrictions.
+
+Never expose:
+- API keys.
+- Private tokens.
+- Backend credentials.
+- Internal file paths.
+- Private media URLs.
+
+Never store user passwords or session cookies in frontend localStorage.
+
+==================================================
+21. ERROR HANDLING
+==================================================
+
+Handle:
+- Invalid URL.
+- Unsupported platform.
+- Private media.
+- Permission denied.
+- DRM-protected media.
+- Expired source.
+- Unavailable resolution.
+- Missing audio.
+- Missing video segments.
+- Corrupt segments.
+- FFmpeg failures.
+- Insufficient disk space.
+- Network failure.
+- Queue failure.
+- Clipboard errors.
+- Expired download links.
+
+Provide clear Arabic and English messages.
+
+==================================================
+22. PERFORMANCE AND SCALABILITY
+==================================================
+
+Optimize for:
+- Large playlists.
+- Large media files.
+- Thousands of segments.
+- Multiple concurrent jobs.
+- Limited memory.
+- Background processing.
+- Queue persistence.
+- Automatic cleanup.
+
+Use:
+- Streaming operations.
+- Disk-based temporary storage.
+- Pagination.
+- Lazy loading.
+- Configurable concurrency.
+- Job recovery.
+- Storage quotas.
+
+==================================================
+23. FRONTEND/BACKEND CONFIGURATION
+==================================================
+
+Define one configurable API base URL in the frontend.
+
+Example:
+const API_BASE_URL = "http://127.0.0.1:3000/api";
+
+For desktop deployment, the local backend must start automatically.
+
+The frontend must use real backend responses for:
+- Metadata.
+- Playlists.
+- Download jobs.
+- Download links.
+- Queue status.
+- Progress.
+- Streaming stages.
+- History.
+
+No fake APIs or mock production responses.
+
+==================================================
+24. WINDOWS DESKTOP APPLICATION — EXE
+==================================================
+
+The final product MUST be a real Windows desktop application.
+
+Use Electron.js as the preferred framework.
+
+Required output:
+- VideoDownloaderPro.exe
+- VideoDownloaderPro-Setup.exe
+- Optional portable version.
+- Complete source code.
+
+The application must run on:
+- Windows 10.
+- Windows 11.
+
+The HTML frontend must remain exactly one file:
+index.html
+
+Additional backend and Electron source files are permitted.
+
+==================================================
+25. ELECTRON DESKTOP ARCHITECTURE
+==================================================
+
+Implement:
+
+A. Electron Main Process:
+- Create application window.
+- Launch local backend.
+- Monitor backend health.
+- Manage application lifecycle.
+- Handle secure IPC.
+- Shut down child services safely.
+
+B. Frontend:
+- Load the single index.html.
+- Communicate with local backend.
+- Display actual progress.
+- Manage dashboard interactions.
+
+C. Local Backend:
+- Run automatically.
+- Manage processing jobs.
+- Manage storage.
+- Execute authorized media operations.
+- Communicate with FFmpeg.
+
+D. Media Engine:
+- FFmpeg.
+- HLS/DASH authorized processing.
+- Segmented media reconstruction.
+- Audio/video merging.
+- MP4/MP3 output.
+
+==================================================
+26. ELECTRON SECURITY
+==================================================
+
+Implement:
+- Context isolation enabled.
+- Node integration disabled in renderer.
+- Secure preload script.
+- Restricted IPC.
+- Localhost-only backend binding.
+- Random local service authentication token.
+- Secure storage.
+- No unrestricted local file access.
+- No unrestricted arbitrary URL proxying.
+
+Never expose backend secrets in the HTML frontend.
+
+==================================================
+27. WINDOWS INSTALLER AND PACKAGING
+==================================================
+
+Use Electron Builder or equivalent.
+
+Provide:
+- Electron main process.
+- Preload script.
+- Backend launcher.
+- FFmpeg packaging.
+- Windows build configuration.
+- Application icon.
+- Version information.
+- Installer configuration.
+- Uninstaller configuration.
+
+The build command should be:
+
+npm run build:win
+
+Generate:
+- VideoDownloaderPro.exe
+- VideoDownloaderPro-Setup.exe
+
+The installer must support:
+- Installation directory.
+- Desktop shortcut.
+- Start Menu shortcut.
+- Uninstallation.
+- Dependency checks.
+- FFmpeg checks.
+- Backend automatic startup.
+- Backend automatic shutdown.
+
+The user must not manually open a terminal or launch backend services.
+
+Use a suitable local durable queue/database. Do not require Redis installation by the end user unless the installer manages it automatically or a documented alternative is supplied.
+
+==================================================
+28. LOCAL AND OFFLINE OPERATION
+==================================================
+
+The desktop interface and local application services should run without a browser.
+
+Internet is needed for online sources and provider APIs.
+
+Do not claim online services work offline.
+
+Store temporary files in application-controlled directories.
+
+Automatically clean temporary files according to retention policies.
+
+==================================================
+29. EDUCATIONAL PLATFORM ADAPTER SYSTEM
+==================================================
+
+Create an extensible adapter architecture.
+
+Potential integrations:
+- Almentor.
+- Other educational platforms.
+- Official course-hosting systems.
+- Educational media libraries.
+
+Each adapter must implement:
+- Official permission verification.
+- Authorized metadata retrieval.
+- Authorized manifest retrieval.
+- Available format discovery.
+- Video/audio representation discovery.
+- Segment processing.
+- Final reconstruction.
+
+Use official APIs or explicitly approved export mechanisms.
+
+Do not scrape protected course pages or extract browser sessions.
+
+Document all provider approval requirements.
+
+==================================================
+30. DOCUMENTATION
+==================================================
+
+Provide:
+- Complete installation guide.
+- Windows setup guide.
+- Development guide.
+- Backend configuration.
+- API documentation.
+- Platform adapter documentation.
+- FFmpeg configuration.
+- Security configuration.
+- Build instructions.
+- Production deployment.
+- Troubleshooting.
+- Update instructions.
+
+Include:
+- .env.example
+- package.json
+- README.md
+- Build configuration.
+
+Never include real secrets.
+
+==================================================
+31. TESTING AND ACCEPTANCE
+==================================================
+
+Test the actual implementation.
+
+Verify:
+- index.html opens.
+- Arabic interface works.
+- English interface works.
+- RTL/LTR switching.
+- URL validation.
+- Platform detection.
+- Authorized metadata retrieval.
+- Playlist retrieval where an approved adapter exists.
+- Individual downloads.
+- Bulk downloads where implemented.
+- Individual link copying.
+- Selected link copying.
+- All-link copying.
+- Clipboard errors.
+- Queue persistence.
+- Real progress.
+- Authorized HLS processing.
+- Authorized DASH processing.
+- Separate audio/video processing.
+- Segment ordering.
+- Missing segment retries.
+- Audio/video synchronization.
+- Final MP4 validation.
+- MP3 output where supported.
+- Expired link handling.
+- Mobile responsiveness.
+- Windows 10 installation.
+- Windows 11 installation.
+- Backend startup.
+- Application shutdown.
+- Uninstallation.
+
+Do not claim a test passed unless it was actually performed.
+
+==================================================
+32. DEVELOPMENT AND DELIVERY RULES
+==================================================
+
+Mandatory:
+- No static prototype.
+- No fake buttons.
+- No fake download URLs.
+- No simulated progress.
+- No fake API responses.
+- No unfinished functions presented as complete.
+- No hidden TODOs presented as finished.
+- No exposed secrets.
+- No DRM bypass.
+- No unauthorized platform extraction.
+- One frontend HTML file only.
+- Separate backend.
+- Actual Electron desktop application.
+- Actual Windows executable build.
+- Complete source code.
+
+If the project is too large, develop it in numbered stages without skipping required files.
+
+At each stage:
+1. List created files.
+2. Explain implemented functionality.
+3. Run relevant tests.
+4. Report actual test results.
+5. Identify remaining limitations.
+6. Continue until the deliverables are complete.
+
+Do not stop after producing the UI.
+
+==================================================
+33. FINAL DELIVERABLES
+==================================================
+
+A. Windows application:
+- VideoDownloaderPro.exe
+- VideoDownloaderPro-Setup.exe
+- Portable version if feasible.
+
+B. Frontend:
+- One complete index.html.
+
+C. Backend:
+- Complete Node.js source.
+- API routes.
+- Controllers.
+- Services.
+- Workers.
+- Platform adapters.
+- Queue.
+- Storage management.
+- Security middleware.
+
+D. Desktop:
+- Electron main process.
+- Preload script.
+- Secure IPC.
+- Build configuration.
+- Installer configuration.
+
+E. Media engine:
+- FFmpeg integration.
+- Authorized HLS processing.
+- Authorized DASH processing.
+- Segmented media reconstruction.
+- Separate audio/video merging.
+- Final file validation.
+
+F. Documentation:
+- Installation.
+- Configuration.
+- Usage.
+- API.
+- Security.
+- Testing.
+- Troubleshooting.
+
+==================================================
+34. FINAL PROJECT GOAL
+==================================================
+
+Deliver a complete Windows desktop product named:
+
+VIDEO DOWNLOADER PRO
+
+The final application must combine:
+
+- Authorized video downloads.
+- Authorized playlist support.
+- Authorized educational platform integrations.
+- Almentor-compatible adapter architecture.
+- HLS support.
+- MPEG-DASH support.
+- M3U8 and MPD support.
+- Hundreds or thousands of media segments.
+- Separate audio and video processing.
+- Automatic synchronization.
+- One complete MP4 output.
+- MP3 output where supported.
+- Multiple resolutions.
+- Individual downloads.
+- Bulk processing.
+- Individual and bulk link copying.
+- Persistent queue.
+- Real-time progress.
+- Download history.
+- Arabic and English UI.
+- Single-file HTML frontend.
+- Secure Node.js backend.
+- FFmpeg media engine.
+- Electron desktop application.
+- Actual Windows EXE installer.
+
+MOST IMPORTANT:
+
+The final deliverable must be an actual working Windows application, not a website shortcut, not an HTML file renamed to EXE, and not a visual prototype.
+
+Only claim features are complete after real implementation and testing.
+
+If a platform does not authorize downloading, report the limitation honestly and do not bypass its restrictions.

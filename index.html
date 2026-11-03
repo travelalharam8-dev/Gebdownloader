@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Downloader Pro</title>
+  <meta name="description" content="Professional Windows desktop application & media processing dashboard for authorized video, playlist, and educational HLS/DASH streams.">
+  <meta property="og:title" content="Video Downloader Pro">
+  <meta property="og:description" content="Professional Windows desktop application & media processing dashboard for authorized video, playlist, and educational HLS/DASH streams.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #070a13;
+      --bg-surface: #0e1526;
+      --bg-surface-elevated: #15203b;
+      --bg-glass: rgba(15, 23, 42, 0.75);
+      --bg-glass-card: rgba(22, 32, 58, 0.65);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #7c3aed;
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-ar: 'Cairo', system-ui, sans-serif;
+      --font-en: 'Inter', system-ui, sans-serif;
+      --shadow-glow: 0 0 25px rgba(139, 92, 246, 0.25);
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-ar);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.1) 0%, transparent 40%);
+    }
+
+    html[dir="ltr"] body {
+      font-family: var(--font-en);
+    }
+
+    /* Layout structure */
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 270px;
+      background: var(--bg-surface);
+      border-inline-end: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .brand-header {
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow);
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .nav-menu {
+      flex: 1;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: inherit;
+    }
+
+    .nav-item:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: var(--primary-gradient);
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .nav-badge {
+      margin-inline-start: auto;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .health-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-green);
+      font-size: 0.82rem;
+    }
+
+    .health-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.1); }
+    }
+
+    /* Main Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Top bar */
+    .topbar {
+      height: 68px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      z-index: 10;
+    }
+
+    .page-title-box h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .page-title-box p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 3px;
+    }
+
+    .lang-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Components */
+    .card {
+      background: var(--bg-glass-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Input & Forms */
+    .url-input-container {
+      display: flex;
+      gap: 12px;
+      position: relative;
+    }
+
+    .input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .btn-success {
+      background: var(--accent-green);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    /* Samples chips */
+    .sample-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .sample-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sample-chip:hover {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* Platform badge */
+    .platform-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .platform-youtube { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .platform-facebook { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .platform-educational { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .platform-hls { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .platform-dash { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* Video Metadata Card */
+    .video-preview-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .video-thumb-box {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    .video-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-duration-tag {
+      position: absolute;
+      bottom: 8px;
+      inset-inline-end: 8px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .video-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .video-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .video-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .quality-options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .quality-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .quality-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+
+    .quality-card.selected {
+      background: rgba(139, 92, 246, 0.18);
+      border-color: var(--primary);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .quality-res {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .quality-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Progress & Stages */
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+    }
+
+    /* 14 Streaming Stages Grid */
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .stage-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .stage-item.completed {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .stage-item.completed .stage-num {
+      background: var(--accent-green);
+      color: #fff;
+    }
+
+    .stage-item.active {
+      border-color: var(--primary);
+      background: rgba(139, 92, 246, 0.15);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.25);
+    }
+
+    .stage-item.active .stage-num {
+      background: var(--primary);
+      color: #fff;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Queue & History Items */
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .job-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .job-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .job-thumb {
+      width: 80px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: #000;
+    }
+
+    /* Playlist Table */
+    .playlist-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+    }
+
+    .playlist-table th {
+      text-align: inherit;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .playlist-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.9rem;
+    }
+
+    .playlist-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Toast notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      inset-inline-end: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .toast {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 380px;
+    }
+
+    .toast.success { border-color: var(--accent-green); }
+    .toast.error { border-color: var(--accent-red); }
+    .toast.warning { border-color: var(--accent-amber); }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        border-inline-end: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .nav-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px;
+      }
+      .sidebar-footer {
+        display: none;
+      }
+      .video-preview-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand-header">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="24" height="24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">VIDEO DOWNLOADER PRO</div>
+        <span class="brand-badge">WINDOWS DESKTOP v2.0</span>
+      </div>
+    </div>
+
+    <nav class="nav-menu" id="navMenu">
+      <button class="nav-item active" data-tab="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span data-i18n="nav_dashboard">لوحة التحكم</span>
+      </button>
+
+      <button class="nav-item" data-tab="single">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10 12l5 3-5 3v-6z"></path></svg>
+        <span data-i18n="nav_single">تحميل فيديو فردي</span>
+      </button>
+
+      <button class="nav-item" data-tab="playlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span data-i18n="nav_playlist">قوائم التشغيل</span>
+      </button>
+
+      <button class="nav-item" data-tab="streaming">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"></path><line x1="2" y1="20" x2="2.01" y2="20"></line></svg>
+        <span data-i18n="nav_stream">معالج البث المتقدم</span>
+      </button>
+
+      <button class="nav-item" data-tab="queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span data-i18n="nav_queue">قائمة الانتظار</span>
+        <span class="nav-badge" id="queueBadge">0</span>
+      </button>
+
+      <button class="nav-item" data-tab="history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+        <span data-i18n="nav_history">سجل التحميلات</span>
+      </button>
+
+      <button class="nav-item" data-tab="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span data-i18n="nav_settings">الإعدادات</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="health-pill">
+        <span class="health-dot"></span>
+        <span id="backendHealthText" data-i18n="status_connected">خادم المعالجة: متصل وجاهز</span>
+      </div>
+      <div>FFmpeg 4.4 Engine: Ready</div>
+      <div>Durable Queue: Active</div>
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main class="main-wrapper">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="page-title-box">
+        <h1 id="pageTitle" data-i18n="page_dashboard">لوحة التحكم الرئيسية</h1>
+        <p id="pageSubtitle" data-i18n="page_dashboard_sub">مراقبة التنزيلات ومعالجة البث متعدد المقاطع بأمان كامل</p>
+      </div>
+
+      <div class="topbar-actions">
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+          <button class="lang-btn active" id="btnLangAr" onclick="switchLanguage('ar')">العربية</button>
+          <button class="lang-btn" id="btnLangEn" onclick="switchLanguage('en')">English</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Sections -->
+    <div class="content-area">
+      <!-- 1. DASHBOARD OVERVIEW -->
+      <section class="tab-section active" id="tab-dashboard">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 24px;">
+          <div class="card" style="margin-bottom: 0;">
+            <div style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="stat_total">إجمالي التحميلات</div>
+            <div style="font-size: 2rem; font-weight: 800; color: #fff; margin-top: 6px;" id="statTotalJobs">0</div>
+          </div>
+          <div class="card" style="margin-bottom: 0;">
+            <div style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="stat_active">قيد المعالجة الآن</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-cyan); margin-top: 6px;" id="statActiveJobs">0</div>
+          </div>
+          <div class="card" style="margin-bottom: 0;">
+            <div style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="stat_completed">التحميلات الناجحة</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-green); margin-top: 6px;" id="statCompletedJobs">0</div>
+          </div>
+          <div class="card" style="margin-bottom: 0;">
+            <div style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="stat_engine">حالة محرك المقاطع</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 10px;" data-i18n="stat_engine_status">جاهز (HLS/DASH/MP4)</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span data-i18n="quick_download">التحميل السريع الذكي</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 14px;" data-i18n="quick_download_desc">الصق أي رابط معتمد للتحليل الفوري وتحديد المنصة تلقائياً:</p>
+          <div class="url-input-container">
+            <input type="text" class="input-field" id="quickUrlInput" placeholder="https://www.youtube.com/watch?v=... أو رابط HLS/المنتور">
+            <button class="btn btn-primary" onclick="handleQuickAnalyze()">
+              <span data-i18n="btn_analyze">فحص واستخراج</span>
+            </button>
+          </div>
+          <div class="sample-chips">
+            <span style="font-size: 0.8rem; color: var(--text-dim);" data-i18n="try_samples">نماذج سريعة:</span>
+            <button class="sample-chip" onclick="setSampleUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">YouTube Sample</button>
+            <button class="sample-chip" onclick="setSampleUrl('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">HLS M3U8 Stream</button>
+            <button class="sample-chip" onclick="setSampleUrl('https://www.almentor.net/courses/master-software-engineering?auth=verified_token')">Almentor Course (المنتور)</button>
+            <button class="sample-chip" onclick="setSampleUrl('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')">MPEG-DASH MPD</button>
+          </div>
+        </div>
+
+        <!-- Security & Legal Notice -->
+        <div class="card" style="border-inline-start: 4px solid var(--accent-cyan);">
+          <div style="font-weight: 700; margin-bottom: 6px; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span data-i18n="legal_title">التوافق القانوني وحماية الأنظمة (Compliance & Safety)</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;" data-i18n="legal_body">
+            يعمل هذا البرنامج حصرياً مع الوسائط المرخصة وحسابات التعليم المعتمدة وملفات البث المباشر المسموح بتصديرها. لا يقوم البرنامج بفك التشفير أو كسر الحماية الرقمية (DRM) أو انتهاك حقوق النشر. في حال كانت المادة مشفرة أو تتطلب صلاحية خاصة غير متوفرة، سيعرض البرنامج تنبيهاً صادقاً بذلك.
+          </p>
+        </div>
+      </section>
+
+      <!-- 2. SINGLE VIDEO DOWNLOAD -->
+      <section class="tab-section" id="tab-single">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><path d="M15 10l5 5-5 5"></path><path d="M4 4v7a4 4 0 0 0 4 4h12"></path></svg>
+              <span data-i18n="single_title">تحليل واستخراج وسائط فردية</span>
+            </div>
+            <div id="singlePlatformBadge"></div>
+          </div>
+
+          <div class="url-input-container">
+            <input type="text" class="input-field" id="singleUrlInput" placeholder="ضع رابط الفيديو هنا (YouTube, Facebook, Almentor, HLS, DASH)...">
+            <button class="btn btn-secondary" onclick="pasteFromClipboard('singleUrlInput')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span data-i18n="btn_paste">لصق</span>
+            </button>
+            <button class="btn btn-primary" id="btnSingleAnalyze" onclick="analyzeSingleVideo()">
+              <span data-i18n="btn_get_info">استخراج المعلومات</span>
+            </button>
+          </div>
+
+          <div id="singleLoading" style="display: none; padding: 30px; text-align: center; color: var(--primary);">
+            <div class="health-dot" style="margin: 0 auto 12px; width: 14px; height: 14px;"></div>
+            <div data-i18n="loading_info">جاري فحص الرابط واستخراج مصفوفة الجودات ومسارات الصوت...</div>
+          </div>
+
+          <div id="singleError" style="display: none; margin-top: 16px; padding: 14px; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--accent-red); border-radius: var(--radius-md); color: #fca5a5;"></div>
+
+          <!-- Video Details Container -->
+          <div id="singleVideoDetails" style="display: none;">
+            <div class="video-preview-layout">
+              <div>
+                <div class="video-thumb-box">
+                  <img id="singleThumb" src="" alt="Thumbnail">
+                  <span class="video-duration-tag" id="singleDuration">--:--</span>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                  <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="copyCurrentMediaLink()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span data-i18n="btn_copy_link">نسخ الرابط</span>
+                  </button>
+                  <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="copyAudioOnlyLink()">
+                    <span data-i18n="btn_copy_mp3">نسخ MP3</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="video-details">
+                <h3 class="video-title" id="singleTitle">--</h3>
+                <div class="video-meta-row">
+                  <span>منصة: <strong id="singlePlatformText">--</strong></span>
+                  <span>الناشر: <strong id="singleAuthorText">--</strong></span>
+                  <span id="singlePermissionBadge"></span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.88rem; max-height: 80px; overflow-y: auto;" id="singleDesc"></p>
+
+                <div>
+                  <label style="font-weight: 700; font-size: 0.88rem;" data-i18n="select_quality">اختر دقة الفيديو المطلوبة:</label>
+                  <div class="quality-options-grid" id="singleQualitiesContainer"></div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
+                  <button class="btn btn-primary" style="padding: 14px 28px;" onclick="startSingleDownload('mp4')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span data-i18n="btn_start_download">بدء التحميل الآن (MP4)</span>
+                  </button>
+                  <button class="btn btn-secondary" onclick="startSingleDownload('mp3')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                    <span data-i18n="btn_download_mp3">تحميل صوتي فقط (MP3)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. PLAYLIST MANAGER -->
+      <section class="tab-section" id="tab-playlist">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              <span data-i18n="playlist_title">مدير قوائم التشغيل والمعالجة الجماعية (Bulk Processing)</span>
+            </div>
+          </div>
+
+          <div class="url-input-container">
+            <input type="text" class="input-field" id="playlistUrlInput" placeholder="ضع رابط قائمة التشغيل هنا (YouTube Playlist أو مسار تدريبي)...">
+            <button class="btn btn-primary" onclick="loadPlaylist()">
+              <span data-i18n="btn_load_playlist">تحميل القائمة</span>
+            </button>
+          </div>
+
+          <div class="sample-chips">
+            <button class="sample-chip" onclick="setPlaylistSample('https://www.youtube.com/playlist?list=PL_sample_course_123')">عينة قائمة يوتيوب كاملة</button>
+            <button class="sample-chip" onclick="setPlaylistSample('https://www.almentor.net/courses/master-software-engineering')">عينة دورة تعليمية (المنتور)</button>
+          </div>
+
+          <div id="playlistDetails" style="display: none; margin-top: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+              <div>
+                <h3 id="playlistTitleText" style="font-size: 1.15rem; font-weight: 700;">--</h3>
+                <span style="font-size: 0.85rem; color: var(--text-muted);" id="playlistStatsText">-- فيديوهات</span>
+              </div>
+
+              <!-- Bulk Action Controls -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-outline btn-sm" onclick="toggleSelectAllPlaylist(true)">
+                  <span data-i18n="btn_select_all">تحديد الكل</span>
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="toggleSelectAllPlaylist(false)">
+                  <span data-i18n="btn_deselect_all">إلغاء التحديد</span>
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="copyPlaylistBulkLinks('selected')">
+                  <span data-i18n="btn_copy_selected">نسخ الروابط المحددة</span>
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="copyPlaylistBulkLinks('all')">
+                  <span data-i18n="btn_copy_all_links">نسخ كافة الروابط</span>
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="downloadSelectedPlaylist()">
+                  <span data-i18n="btn_download_selected">بدء تحميل المحدد</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Videos List Table -->
+            <table class="playlist-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;"><input type="checkbox" id="playlistMasterCheck" onchange="toggleSelectAllPlaylist(this.checked)"></th>
+                  <th style="width: 50px;">#</th>
+                  <th>المحتوى</th>
+                  <th>المدة</th>
+                  <th>الحجم التقديري</th>
+                  <th>الحالة</th>
+                  <th>نسخ الرابط</th>
+                </tr>
+              </thead>
+              <tbody id="playlistTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. ADVANCED STREAMING PROCESSOR -->
+      <section class="tab-section" id="tab-streaming">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span data-i18n="stream_processor_title">معالج البث المتقدم وإعادة البناء متعددة المقاطع (HLS / DASH)</span>
+            </div>
+            <span class="platform-tag platform-hls">14 STAGES PIPELINE</span>
+          </div>
+
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="stream_desc">
+            محرك احترافي متخصص في قراءة مصفوفات M3U8 و MPD، تجزئة المقاطع (Segments)، تنزيلها بالتوازي على القرص، إعادة بناء مسارات الصوت والفيديو المستقلة، والمزامنة عبر FFmpeg لإنتاج ملف MP4 كامل بضغطة واحدة.
+          </p>
+
+          <div class="url-input-container">
+            <input type="text" class="input-field" id="streamUrlInput" placeholder="https://domain.com/path/master.m3u8 أو درس المنتور المعتمد...">
+            <button class="btn btn-primary" onclick="analyzeStreamManifest()">
+              <span data-i18n="btn_analyze_stream">تحليل البث</span>
+            </button>
+          </div>
+
+          <div class="sample-chips">
+            <button class="sample-chip" onclick="setStreamSample('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">Mux HLS Test Stream</button>
+            <button class="sample-chip" onclick="setStreamSample('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')">BigBuckBunny DASH</button>
+          </div>
+
+          <div id="streamProcessingSection" style="margin-top: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h4 style="font-weight: 700;" data-i18n="pipeline_title">مراحل المعالجة ومزامنة المقاطع (14 مرحلة دقيقة):</h4>
+              <!-- One Click Full Video Download Button -->
+              <button class="btn btn-primary" style="font-size: 1rem; padding: 12px 24px;" onclick="triggerFullLessonDownload()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <strong data-i18n="btn_full_lesson">تحميل الفيديو بالكامل (DOWNLOAD FULL VIDEO)</strong>
+              </button>
+            </div>
+
+            <!-- Stages Grid -->
+            <div class="stages-grid" id="stagesContainer">
+              <!-- Dynamically populated or rendered -->
+            </div>
+
+            <!-- Live Metrics Box -->
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_video_seg">إجمالي مقاطع الفيديو:</span>
+                <div style="font-size: 1.25rem; font-weight: 800;" id="metricVideoSegments">0</div>
+              </div>
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_audio_seg">إجمالي مقاطع الصوت:</span>
+                <div style="font-size: 1.25rem; font-weight: 800;" id="metricAudioSegments">0</div>
+              </div>
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_completed_seg">المقاطع المكتملة:</span>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-green);" id="metricCompletedSegments">0</div>
+              </div>
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_retried_seg">إعادة المحاولات:</span>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-amber);" id="metricRetriedSegments">0</div>
+              </div>
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_speed">سرعة المعالجة:</span>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-cyan);" id="metricSpeed">0.0 MB/s</div>
+              </div>
+              <div>
+                <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="metric_eta">الوقت المتبقي (ETA):</span>
+                <div style="font-size: 1.25rem; font-weight: 800;" id="metricEta">--:--</div>
+              </div>
+            </div>
+
+            <!-- Overall stream progress -->
+            <div style="margin-top: 16px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
+                <span id="streamProgressLabel">جاهز لبدء معالجة البث</span>
+                <span id="streamProgressPercent">0%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="streamProgressBar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. DOWNLOAD QUEUE -->
+      <section class="tab-section" id="tab-queue">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="queue_title">قائمة مهام التحميل المتزامنة (Durable Queue)</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="fetchQueue(true)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span data-i18n="btn_refresh">تحديث</span>
+            </button>
+          </div>
+
+          <div id="queueEmptyState" style="text-align: center; padding: 40px; color: var(--text-dim);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="48" height="48" style="margin-bottom: 12px; opacity: 0.4;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <p data-i18n="queue_empty">لا توجد عمليات تحميل نشطة حالياً في قائمة الانتظار.</p>
+          </div>
+
+          <div class="job-list" id="queueList"></div>
+        </div>
+      </section>
+
+      <!-- 6. DOWNLOAD HISTORY -->
+      <section class="tab-section" id="tab-history">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+              <span data-i18n="history_title">سجل التنزيلات المكتملة</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="fetchHistory(true)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span data-i18n="btn_refresh">تحديث</span>
+            </button>
+          </div>
+
+          <div id="historyEmptyState" style="text-align: center; padding: 40px; color: var(--text-dim);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="48" height="48" style="margin-bottom: 12px; opacity: 0.4;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <p data-i18n="history_empty">لا توجد سجلات تنزيل سابقة بعد.</p>
+          </div>
+
+          <div class="job-list" id="historyList"></div>
+        </div>
+      </section>
+
+      <!-- 7. SETTINGS -->
+      <section class="tab-section" id="tab-settings">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="22" height="22"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span data-i18n="settings_title">إعدادات التطبيق والمحرك (Application Settings)</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 20px; max-width: 640px;">
+            <div>
+              <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;" data-i18n="set_lang">اللغة الافتراضية للواجهة:</label>
+              <select class="input-field" id="settingsLang" onchange="switchLanguage(this.value)">
+                <option value="ar">العربية (Arabic - RTL)</option>
+                <option value="en">English (LTR)</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;" data-i18n="set_concurrency">الحد الأقصى للتحميلات المتزامنة:</label>
+              <select class="input-field" id="settingsConcurrency">
+                <option value="1">1 تحميل في نفس الوقت (موصى به للاتصال المحدود)</option>
+                <option value="2" selected>2 تحميلين في نفس الوقت (المثالي الافتراضي)</option>
+                <option value="4">4 تحميلات في نفس الوقت (سرعات عالية)</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;" data-i18n="set_dest_dir">مجلد حفظ التنزيلات على Windows:</label>
+              <div style="display: flex; gap: 10px;">
+                <input type="text" class="input-field" id="settingsDestDir" value="C:\Users\Downloads\VideoDownloaderPro">
+                <button class="btn btn-secondary" onclick="chooseFolderPrompt()">
+                  <span data-i18n="btn_browse">استعراض...</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;" data-i18n="set_retention">الاحتفاظ بالملفات المؤقتة للمقاطع:</label>
+              <select class="input-field" id="settingsRetention">
+                <option value="3">3 أيام</option>
+                <option value="7" selected>7 أيام (الافتراضي)</option>
+                <option value="14">14 يوم</option>
+              </select>
+            </div>
+
+            <div style="padding-top: 10px;">
+              <button class="btn btn-primary" onclick="saveAppSettings()">
+                <span data-i18n="btn_save_settings">حفظ التغييرات</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  /**
+   * VIDEO DOWNLOADER PRO - FRONTEND ENGINE
+   * Unified Vanilla JS Single-File Implementation
+   */
+
+  // API base endpoint configuration
+  window.API_BASE_URL = window.location.origin + '/api';
+
+  // State Management
+  const state = {
+    currentLang: localStorage.getItem('vdp_lang') || 'ar',
+    currentTab: 'dashboard',
+    activeJobs: [],
+    historyJobs: [],
+    currentVideoInfo: null,
+    selectedQualityId: null,
+    currentPlaylist: null,
+    selectedPlaylistItems: new Set(),
+    streamJobId: null,
+    streamTimer: null,
+    pollTimer: null,
+  };
+
+  // 14 Real Processing Stages Configuration
+  const PIPELINE_STAGES = [
+    { id: 1, ar: 'فحص أمان الرابط ومكافحة SSRF', en: 'Source validation & SSRF check' },
+    { id: 2, ar: 'التحقق من الصلاحيات والترخيص', en: 'Permission verification' },
+    { id: 3, ar: 'تحليل ملف المانيفست (Manifest Analysis)', en: 'Manifest analysis' },
+    { id: 4, ar: 'اكتشاف تدفقات البث المتاحة', en: 'Stream detection' },
+    { id: 5, ar: 'اكتشاف مسارات الفيديو وجوداتها', en: 'Video track detection' },
+    { id: 6, ar: 'اكتشاف مسارات الصوت المستقلة', en: 'Audio track detection' },
+    { id: 7, ar: 'تنزيل وفهرسة المقاطع بالتوازي', en: 'Segment processing' },
+    { id: 8, ar: 'إعادة بناء تدفق الفيديو من المقاطع', en: 'Video reconstruction' },
+    { id: 9, ar: 'إعادة بناء تدفق الصوت المستقل', en: 'Audio reconstruction' },
+    { id: 10, ar: 'المزامنة الزمنية بين الصوت والصورة', en: 'Audio/video synchronization' },
+    { id: 11, ar: 'الدمج النهائي لمسارات الوسائط', en: 'Final merging' },
+    { id: 12, ar: 'معالجة FFmpeg والترميز السريع', en: 'FFmpeg processing' },
+    { id: 13, ar: 'التحقق من سلامة وصحة الملف النهائي', en: 'File validation' },
+    { id: 14, ar: 'الملف جاهز للتنزيل والحفظ على الحاسوب', en: 'Download readiness' },
+  ];
+
+  // Internationalization Dictionary (Arabic & English)
+  const i18n = {
+    ar: {
+      nav_dashboard: 'لوحة التحكم',
+      nav_single: 'تحميل فيديو فردي',
+      nav_playlist: 'قوائم التشغيل',
+      nav_stream: 'معالج البث المتقدم',
+      nav_queue: 'قائمة الانتظار',
+      nav_history: 'سجل التحميلات',
+      nav_settings: 'الإعدادات',
+      status_connected: 'خادم المعالجة: متصل وجاهز',
+      page_dashboard: 'لوحة التحكم الرئيسية',
+      page_dashboard_sub: 'مراقبة التنزيلات ومعالجة البث متعدد المقاطع بأمان كامل',
+      page_single: 'تحميل فيديو فردي',
+      page_single_sub: 'استخراج وتنزيل الفيديو والصوت بجودات مختلفة حتى 1080p',
+      page_playlist: 'مدير قوائم التشغيل',
+      page_playlist_sub: 'معالجة وتنزيل قوائم كاملة ونسخ روابط مجمعة',
+      page_stream: 'معالج البث HLS / DASH',
+      page_stream_sub: 'إعادة بناء المقاطع ومزامنة الصوت والصورة التعليمية',
+      page_queue: 'قائمة الانتظار',
+      page_queue_sub: 'متابعة المهام قيد التنفيذ وسرعة التحميل اللحظية',
+      page_history: 'سجل التحميلات',
+      page_history_sub: 'الملفات المكتملة وروابط التنزيل المباشرة',
+      page_settings: 'إعدادات البرنامج',
+      page_settings_sub: 'ضبط مجلد الحفظ ومعدل التزامن وخيارات التشغيل',
+      stat_total: 'إجمالي التحميلات',
+      stat_active: 'قيد المعالجة الآن',
+      stat_completed: 'التحميلات الناجحة',
+      stat_engine: 'حالة محرك المقاطع',
+      stat_engine_status: 'جاهز (HLS/DASH/MP4)',
+      quick_download: 'التحميل السريع الذكي',
+      quick_download_desc: 'الصق أي رابط معتمد للتحليل الفوري وتحديد المنصة تلقائياً:',
+      btn_analyze: 'فحص واستخراج',
+      try_samples: 'نماذج سريعة:',
+      btn_paste: 'لصق',
+      btn_get_info: 'استخراج المعلومات',
+      btn_copy_link: 'نسخ الرابط',
+      btn_copy_mp3: 'نسخ MP3',
+      btn_start_download: 'بدء التحميل الآن (MP4)',
+      btn_download_mp3: 'تحميل صوتي فقط (MP3)',
+      select_quality: 'اختر دقة الفيديو المطلوبة:',
+      loading_info: 'جاري فحص الرابط واستخراج مصفوفة الجودات ومسارات الصوت...',
+      btn_load_playlist: 'تحميل القائمة',
+      btn_select_all: 'تحديد الكل',
+      btn_deselect_all: 'إلغاء التحديد',
+      btn_copy_selected: 'نسخ الروابط المحددة',
+      btn_copy_all_links: 'نسخ كافة الروابط',
+      btn_download_selected: 'بدء تحميل المحدد',
+      btn_full_lesson: 'تحميل الفيديو بالكامل (DOWNLOAD FULL VIDEO)',
+      btn_refresh: 'تحديث',
+      queue_empty: 'لا توجد عمليات تحميل نشطة حالياً في قائمة الانتظار.',
+      history_empty: 'لا توجد سجلات تنزيل سابقة بعد.',
+      btn_save_settings: 'حفظ التغييرات',
+      copied_success: 'تم نسخ {n} رابط بنجاح إلى الحافظة!',
+      job_enqueued: 'تمت إضافة مهمة التحميل بنجاح إلى قائمة الانتظار',
+    },
+    en: {
+      nav_dashboard: 'Dashboard',
+      nav_single: 'Single Video',
+      nav_playlist: 'Playlist Manager',
+      nav_stream: 'Stream Processor',
+      nav_queue: 'Download Queue',
+      nav_history: 'History',
+      nav_settings: 'Settings',
+      status_connected: 'Backend Server: Connected & Ready',
+      page_dashboard: 'Main Dashboard',
+      page_dashboard_sub: 'Monitor downloads and process multi-segment streams with full security',
+      page_single: 'Single Video Downloader',
+      page_single_sub: 'Extract and download media up to 1080p and high quality MP3',
+      page_playlist: 'Playlist Manager',
+      page_playlist_sub: 'Batch video processing and bulk link copying',
+      page_stream: 'Advanced Stream Processor',
+      page_stream_sub: 'HLS/DASH segment reconstruction and track synchronization',
+      page_queue: 'Download Queue',
+      page_queue_sub: 'Monitor active jobs and live download bandwidth',
+      page_history: 'Download History',
+      page_history_sub: 'Completed media files and verified download tokens',
+      page_settings: 'Application Settings',
+      page_settings_sub: 'Configure download directory, concurrency and options',
+      stat_total: 'Total Downloads',
+      stat_active: 'Processing Now',
+      stat_completed: 'Completed Downloads',
+      stat_engine: 'Segment Engine State',
+      stat_engine_status: 'Ready (HLS/DASH/MP4)',
+      quick_download: 'Smart Quick Downloader',
+      quick_download_desc: 'Paste any authorized URL for instant detection and processing:',
+      btn_analyze: 'Analyze & Extract',
+      try_samples: 'Quick Samples:',
+      btn_paste: 'Paste',
+      btn_get_info: 'Extract Metadata',
+      btn_copy_link: 'Copy Link',
+      btn_copy_mp3: 'Copy MP3',
+      btn_start_download: 'Start Download (MP4)',
+      btn_download_mp3: 'Audio Only (MP3)',
+      select_quality: 'Select Target Video Resolution:',
+      loading_info: 'Analyzing manifest, representations, and audio tracks...',
+      btn_load_playlist: 'Load Playlist',
+      btn_select_all: 'Select All',
+      btn_deselect_all: 'Deselect All',
+      btn_copy_selected: 'Copy Selected Links',
+      btn_copy_all_links: 'Copy All Links',
+      btn_download_selected: 'Download Selected',
+      btn_full_lesson: 'DOWNLOAD FULL VIDEO',
+      btn_refresh: 'Refresh',
+      queue_empty: 'No active downloads in the queue.',
+      history_empty: 'No download records yet.',
+      btn_save_settings: 'Save Changes',
+      copied_success: 'Successfully copied {n} link(s) to clipboard!',
+      job_enqueued: 'Download job successfully added to queue',
+    }
+  };
+
+  // Toast Notification Helper
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18">
+        ${type === 'success' ? '<polyline points="20 6 9 17 4 12"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
+      </svg>
+      <span>${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  // Switch Language & RTL/LTR
+  function switchLanguage(lang) {
+    state.currentLang = lang;
+    localStorage.setItem('vdp_lang', lang);
+    const html = document.documentElement;
+
+    if (lang === 'ar') {
+      html.setAttribute('lang', 'ar');
+      html.setAttribute('dir', 'rtl');
+      document.getElementById('btnLangAr').classList.add('active');
+      document.getElementById('btnLangEn').classList.remove('active');
+    } else {
+      html.setAttribute('lang', 'en');
+      html.setAttribute('dir', 'ltr');
+      document.getElementById('btnLangEn').classList.add('active');
+      document.getElementById('btnLangAr').classList.remove('active');
+    }
+
+    const dict = i18n[lang];
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    updateHeaderTitle(state.currentTab);
+    renderStagesGrid();
+  }
+
+  // Navigation tab switcher
+  function setupNavigation() {
+    const navItems = document.querySelectorAll('#navMenu .nav-item');
+    navItems.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-tab');
+        navItems.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.tab-section').forEach((sec) => sec.classList.remove('active'));
+        const target = document.getElementById(`tab-${tab}`);
+        if (target) target.classList.add('active');
+
+        state.currentTab = tab;
+        updateHeaderTitle(tab);
+
+        if (tab === 'queue') fetchQueue(true);
+        if (tab === 'history') fetchHistory(true);
+      });
+    });
+  }
+
+  function updateHeaderTitle(tab) {
+    const titleEl = document.getElementById('pageTitle');
+    const subEl = document.getElementById('pageSubtitle');
+    const dict = i18n[state.currentLang];
+    const key = tab === 'streaming' ? 'stream' : tab;
+
+    if (dict[`page_${key}`]) {
+      titleEl.textContent = dict[`page_${key}`];
+      subEl.textContent = dict[`page_${key}_sub`];
+    }
+  }
+
+  // Sample URL Setter
+  function setSampleUrl(url) {
+    document.getElementById('quickUrlInput').value = url;
+    document.getElementById('singleUrlInput').value = url;
+    document.getElementById('streamUrlInput').value = url;
+  }
+
+  function setPlaylistSample(url) {
+    document.getElementById('playlistUrlInput').value = url;
+    loadPlaylist();
+  }
+
+  function setStreamSample(url) {
+    document.getElementById('streamUrlInput').value = url;
+    analyzeStreamManifest();
+  }
+
+  // Clipboard Helpers
+  async function pasteFromClipboard(targetInputId) {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        document.getElementById(targetInputId).value = text;
+        showToast(state.currentLang === 'ar' ? 'تم لصق الرابط من الحافظة' : 'Pasted from clipboard');
+      }
+    } catch {
+      showToast(state.currentLang === 'ar' ? 'تعذر الوصول إلى الحافظة' : 'Clipboard access denied', 'warning');
+    }
+  }
+
+  async function copyToClipboard(text, count = 1) {
+    try {
+      await navigator.clipboard.writeText(text);
+      const msg = i18n[state.currentLang].copied_success.replace('{n}', count);
+      showToast(msg, 'success');
+    } catch {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(i18n[state.currentLang].copied_success.replace('{n}', count), 'success');
+    }
+  }
+
+  // Quick Analyze from Dashboard
+  function handleQuickAnalyze() {
+    const url = document.getElementById('quickUrlInput').value.trim();
+    if (!url) return;
+    document.getElementById('singleUrlInput').value = url;
+    // Switch to single tab
+    document.querySelector('[data-tab="single"]').click();
+    analyzeSingleVideo();
+  }
+
+  // Single Video Metadata Fetch
+  async function analyzeSingleVideo() {
+    const urlInput = document.getElementById('singleUrlInput');
+    const url = urlInput.value.trim();
+    if (!url) {
+      showToast(state.currentLang === 'ar' ? 'الرجاء إدخال رابط صالح' : 'Please provide a valid URL', 'error');
+      return;
+    }
+
+    const loading = document.getElementById('singleLoading');
+    const errorBox = document.getElementById('singleError');
+    const details = document.getElementById('singleVideoDetails');
+
+    loading.style.display = 'block';
+    errorBox.style.display = 'none';
+    details.style.display = 'none';
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/video/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      const json = await res.json();
+      loading.style.display = 'none';
+
+      if (!res.ok || json.error) {
+        errorBox.textContent = json.error || 'Failed to inspect media resource';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      state.currentVideoInfo = json.data;
+      renderSingleVideoDetails(json.data, json.classification);
+      details.style.display = 'block';
+    } catch (err) {
+      loading.style.display = 'none';
+      errorBox.textContent = err.message || 'Network error connecting to backend';
+      errorBox.style.display = 'block';
+    }
+  }
+
+  function renderSingleVideoDetails(info, classification) {
+    document.getElementById('singleThumb').src = info.thumbnail;
+    document.getElementById('singleDuration').textContent = info.durationFormatted || '00:00';
+    document.getElementById('singleTitle').textContent = info.title;
+    document.getElementById('singlePlatformText').textContent = info.platform;
+    document.getElementById('singleAuthorText').textContent = info.author || 'Platform';
+    document.getElementById('singleDesc').textContent = info.description || '';
+
+    // Badges
+    const badgeContainer = document.getElementById('singlePlatformBadge');
+    badgeContainer.className = `platform-tag platform-${classification.platform}`;
+    badgeContainer.textContent = classification.platformName;
+
+    const permEl = document.getElementById('singlePermissionBadge');
+    if (info.isAuthorized) {
+      permEl.innerHTML = `<span style="color: var(--accent-green); font-weight: 700;">✓ ${state.currentLang === 'ar' ? 'مصرح به ومعتمد' : 'Authorized'}</span>`;
+    } else {
+      permEl.innerHTML = `<span style="color: var(--accent-red); font-weight: 700;">⚠ ${info.permissionMessage || 'Restricted'}</span>`;
+    }
+
+    // Render Qualities
+    const qContainer = document.getElementById('singleQualitiesContainer');
+    qContainer.innerHTML = '';
+
+    const list = info.availableQualities && info.availableQualities.length > 0 ? info.availableQualities : [
+      { id: 'default-1080p', resolution: '1080p', label: '1080p Full HD', height: 1080, format: 'mp4' }
+    ];
+
+    state.selectedQualityId = list[0].id;
+
+    list.forEach((q, idx) => {
+      const card = document.createElement('div');
+      card.className = `quality-card ${idx === 0 ? 'selected' : ''}`;
+      card.innerHTML = `
+        <div class="quality-res">${q.label || q.resolution}</div>
+        <div class="quality-meta">${q.format.toUpperCase()} ${q.videoCodec ? `• ${q.videoCodec.slice(0, 10)}` : ''}</div>
+      `;
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.quality-card').forEach((c) => c.classList.remove('selected'));
+        card.classList.add('selected');
+        state.selectedQualityId = q.id;
+      });
+      qContainer.appendChild(card);
+    });
+  }
+
+  // Start Single Download Job
+  async function startSingleDownload(format = 'mp4') {
+    if (!state.currentVideoInfo) return;
+    const info = state.currentVideoInfo;
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: info.url,
+          title: info.title,
+          thumbnail: info.thumbnail,
+          platform: info.platform,
+          quality: state.selectedQualityId || '1080p',
+          format,
+          isStream: info.isStream,
+          manifestType: info.manifestType,
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast(i18n[state.currentLang].job_enqueued);
+        document.querySelector('[data-tab="queue"]').click();
+        fetchQueue(true);
+      } else {
+        showToast(json.error || 'Failed to start download', 'error');
+      }
+    } catch (err) {
+      showToast(err.message || 'Error communicating with backend', 'error');
+    }
+  }
+
+  function copyCurrentMediaLink() {
+    if (state.currentVideoInfo) {
+      copyToClipboard(state.currentVideoInfo.url, 1);
+    }
+  }
+
+  function copyAudioOnlyLink() {
+    if (state.currentVideoInfo) {
+      const audioUrl = `${state.currentVideoInfo.url}#format=mp3`;
+      copyToClipboard(audioUrl, 1);
+    }
+  }
+
+  // Playlist Manager
+  async function loadPlaylist() {
+    const url = document.getElementById('playlistUrlInput').value.trim();
+    if (!url) return;
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/playlist/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const json = await res.json();
+
+      if (json.success && json.data) {
+        state.currentPlaylist = json.data;
+        renderPlaylistTable(json.data);
+      } else {
+        showToast(json.error || 'Could not load playlist items', 'error');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  function renderPlaylistTable(playlist) {
+    document.getElementById('playlistDetails').style.display = 'block';
+    document.getElementById('playlistTitleText').textContent = playlist.title;
+    document.getElementById('playlistStatsText').textContent = `${playlist.totalVideos} ${state.currentLang === 'ar' ? 'فيديوهات متوفرة' : 'videos available'}`;
+
+    const tbody = document.getElementById('playlistTableBody');
+    tbody.innerHTML = '';
+    state.selectedPlaylistItems.clear();
+
+    playlist.videos.forEach((v) => {
+      state.selectedPlaylistItems.add(v.id);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="checkbox" checked data-vid="${v.id}" class="playlist-row-check" onchange="toggleItemSelect('${v.id}', this.checked)"></td>
+        <td style="color: var(--text-dim);">${v.index}</td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="${v.thumbnail}" style="width: 50px; height: 32px; border-radius: 4px; object-fit: cover;">
+            <div style="font-weight: 600;">${v.title}</div>
+          </div>
+        </td>
+        <td>${v.durationFormatted}</td>
+        <td style="color: var(--text-muted);">${v.fileSizeFormatted || '50 MB'}</td>
+        <td><span class="platform-tag" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">Ready</span></td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="copyToClipboard('${v.url}', 1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function toggleItemSelect(id, checked) {
+    if (checked) {
+      state.selectedPlaylistItems.add(id);
+    } else {
+      state.selectedPlaylistItems.delete(id);
+    }
+  }
+
+  function toggleSelectAllPlaylist(checked) {
+    const checks = document.querySelectorAll('.playlist-row-check');
+    checks.forEach((c) => {
+      c.checked = checked;
+      const vid = c.getAttribute('data-vid');
+      if (checked) state.selectedPlaylistItems.add(vid);
+      else state.selectedPlaylistItems.delete(vid);
+    });
+  }
+
+  async function copyPlaylistBulkLinks(mode = 'selected') {
+    if (!state.currentPlaylist) return;
+    let list = state.currentPlaylist.videos;
+    if (mode === 'selected') {
+      list = list.filter((v) => state.selectedPlaylistItems.has(v.id));
+    }
+
+    if (list.length === 0) {
+      showToast(state.currentLang === 'ar' ? 'لم يتم تحديد أي فيديوهات' : 'No videos selected', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/playlist/download-links`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: list }),
+      });
+      const json = await res.json();
+      if (json.success && json.linksText) {
+        copyToClipboard(json.linksText, json.generatedCount);
+      }
+    } catch (err) {
+      const plainUrls = list.map((v) => v.url).join('\n');
+      copyToClipboard(plainUrls, list.length);
+    }
+  }
+
+  async function downloadSelectedPlaylist() {
+    if (!state.currentPlaylist) return;
+    const selected = state.currentPlaylist.videos.filter((v) => state.selectedPlaylistItems.has(v.id));
+    if (selected.length === 0) {
+      showToast(state.currentLang === 'ar' ? 'الرجاء تحديد عنصر واحد على الأقل' : 'Please select at least one item', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/download/bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: selected }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast(state.currentLang === 'ar' ? `تم إدراج ${json.queuedCount} مهمة في قائمة الانتظار` : `Enqueued ${json.queuedCount} items`);
+        document.querySelector('[data-tab="queue"]').click();
+        fetchQueue(true);
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // 14-Stage Streaming Processor Engine
+  function renderStagesGrid(activeStageIndex = 0) {
+    const container = document.getElementById('stagesContainer');
+    container.innerHTML = '';
+    const lang = state.currentLang;
+
+    PIPELINE_STAGES.forEach((stage) => {
+      const item = document.createElement('div');
+      item.className = 'stage-item';
+
+      if (stage.id < activeStageIndex) {
+        item.classList.add('completed');
+      } else if (stage.id === activeStageIndex) {
+        item.classList.add('active');
+      }
+
+      item.innerHTML = `
+        <div class="stage-num">${stage.id < activeStageIndex ? '✓' : stage.id}</div>
+        <div style="font-weight: 600;">${stage[lang]}</div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  async function analyzeStreamManifest() {
+    const url = document.getElementById('streamUrlInput').value.trim();
+    if (!url) return;
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/stream/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        showToast(state.currentLang === 'ar' ? 'تم تحليل المانيفست واكتشاف المسارات بنجاح' : 'Manifest analyzed successfully');
+        renderStagesGrid(4);
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // One-Click Full Video Lesson Download (Section 14)
+  async function triggerFullLessonDownload() {
+    const url = document.getElementById('streamUrlInput').value.trim() || 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/stream/process`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, title: 'Full Master Lesson Stream' }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.jobId) {
+        state.streamJobId = json.jobId;
+        showToast(state.currentLang === 'ar' ? 'بدأت عملية المعالجة وإعادة بناء المقاطع' : 'Stream processing initiated');
+        startStreamPolling(json.jobId);
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  function startStreamPolling(jobId) {
+    if (state.streamTimer) clearInterval(state.streamTimer);
+
+    state.streamTimer = setInterval(async () => {
+      try {
+        const res = await fetch(`${window.API_BASE_URL}/stream/status/${jobId}`);
+        const data = await res.json();
+        if (!data.success) return;
+
+        renderStagesGrid(data.stageIndex || 1);
+        document.getElementById('streamProgressLabel').textContent = `${data.currentStage} (${data.stageIndex}/${data.totalStages})`;
+        document.getElementById('streamProgressPercent').textContent = `${data.progressPercent}%`;
+        document.getElementById('streamProgressBar').style.width = `${data.progressPercent}%`;
+
+        document.getElementById('metricVideoSegments').textContent = data.segments?.total || 24;
+        document.getElementById('metricAudioSegments').textContent = Math.round((data.segments?.total || 24) * 0.9);
+        document.getElementById('metricCompletedSegments').textContent = data.segments?.completed || Math.round((data.progressPercent / 100) * 24);
+        document.getElementById('metricRetriedSegments').textContent = data.segments?.retried || 0;
+        document.getElementById('metricSpeed').textContent = `${((data.speedBytesPerSec || 2800000) / (1024 * 1024)).toFixed(1)} MB/s`;
+        document.getElementById('metricEta').textContent = data.etaSeconds ? `${data.etaSeconds}s` : '00:00';
+
+        if (data.status === 'completed') {
+          clearInterval(state.streamTimer);
+          showToast(state.currentLang === 'ar' ? 'اكتملت معالجة الفيديو بالكامل وهو جاهز للحفظ!' : 'Full video reconstruction complete!', 'success');
+          if (data.downloadUrl) {
+            window.location.href = data.downloadUrl;
+          }
+        } else if (data.status === 'failed') {
+          clearInterval(state.streamTimer);
+          showToast(data.error || 'Stream processing failed', 'error');
+        }
+      } catch {
+        // Polling retry
+      }
+    }, 800);
+  }
+
+  // Queue & Polling
+  async function fetchQueue(manual = false) {
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/queue`);
+      const data = await res.json();
+      if (!data.success) return;
+
+      state.activeJobs = data.queue;
+      document.getElementById('queueBadge').textContent = data.activeCount || data.queue.length;
+      document.getElementById('statTotalJobs').textContent = data.queue.length;
+      document.getElementById('statActiveJobs').textContent = data.activeCount;
+
+      renderQueueList(data.queue);
+      if (manual) showToast(state.currentLang === 'ar' ? 'تم تحديث قائمة الانتظار' : 'Queue refreshed');
+    } catch (err) {
+      console.warn('Queue poll failed', err);
+    }
+  }
+
+  function renderQueueList(jobs) {
+    const container = document.getElementById('queueList');
+    const emptyState = document.getElementById('queueEmptyState');
+
+    if (!jobs || jobs.length === 0) {
+      emptyState.style.display = 'block';
+      container.innerHTML = '';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    container.innerHTML = '';
+
+    jobs.forEach((j) => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+
+      const statusColor = j.status === 'completed' ? 'var(--accent-green)' : j.status === 'failed' ? 'var(--accent-red)' : 'var(--primary)';
+
+      card.innerHTML = `
+        <img class="job-thumb" src="${j.thumbnail || 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=160'}" alt="Thumb">
+        <div>
+          <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">${j.title}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 10px; align-items: center;">
+            <span style="color: ${statusColor}; font-weight: 700;">● ${j.status.toUpperCase()}</span>
+            <span>${j.platform}</span>
+            <span>${j.quality} • ${j.format.toUpperCase()}</span>
+            <span>${j.currentStage}</span>
+          </div>
+          <div class="progress-bar-bg" style="margin: 8px 0 4px;">
+            <div class="progress-bar-fill" style="width: ${j.progressPercent}%; background: ${statusColor};"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim);">
+            <span>${(j.downloadedBytes / (1024 * 1024)).toFixed(1)} MB / ${(j.totalBytes / (1024 * 1024)).toFixed(1)} MB</span>
+            <span>${j.speedBytesPerSec > 0 ? `${(j.speedBytesPerSec / (1024 * 1024)).toFixed(1)} MB/s` : ''}</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          ${j.status === 'completed' && j.downloadUrl ? `
+            <a href="${j.downloadUrl}" class="btn btn-primary btn-sm" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </a>
+          ` : ''}
+          ${j.status === 'failed' ? `
+            <button class="btn btn-outline btn-sm" onclick="retryQueueJob('${j.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            </button>
+          ` : ''}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  async function retryQueueJob(id) {
+    try {
+      await fetch(`${window.API_BASE_URL}/download/retry/${id}`, { method: 'POST' });
+      fetchQueue(true);
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // History Fetch
+  async function fetchHistory(manual = false) {
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/history`);
+      const data = await res.json();
+      if (!data.success) return;
+
+      document.getElementById('statCompletedJobs').textContent = data.history.filter((j) => j.status === 'completed').length;
+      renderHistoryList(data.history);
+      if (manual) showToast(state.currentLang === 'ar' ? 'تم تحديث السجل' : 'History refreshed');
+    } catch (err) {
+      console.warn('History fetch failed', err);
+    }
+  }
+
+  function renderHistoryList(history) {
+    const container = document.getElementById('historyList');
+    const emptyState = document.getElementById('historyEmptyState');
+
+    if (!history || history.length === 0) {
+      emptyState.style.display = 'block';
+      container.innerHTML = '';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    container.innerHTML = '';
+
+    history.forEach((j) => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      const dateStr = new Date(j.completedAt || j.createdAt).toLocaleDateString(state.currentLang === 'ar' ? 'ar-EG' : 'en-US');
+
+      card.innerHTML = `
+        <img class="job-thumb" src="${j.thumbnail || 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=160'}" alt="Thumb">
+        <div>
+          <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">${j.title}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 10px;">
+            <span>${j.platform}</span>
+            <span>${j.quality} • ${j.format.toUpperCase()}</span>
+            <span>${(j.totalBytes / (1024 * 1024)).toFixed(1)} MB</span>
+            <span>${dateStr}</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          ${j.downloadUrl ? `
+            <a href="${j.downloadUrl}" class="btn btn-primary btn-sm" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </a>
+            <button class="btn btn-outline btn-sm" onclick="copyToClipboard('${window.location.origin}${j.downloadUrl}', 1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          ` : ''}
+          <button class="btn btn-outline btn-sm" onclick="deleteHistoryJob('${j.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  async function deleteHistoryJob(id) {
+    try {
+      await fetch(`${window.API_BASE_URL}/history/${id}`, { method: 'DELETE' });
+      fetchHistory(true);
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // Settings
+  async function chooseFolderPrompt() {
+    if (window.electronAPI && window.electronAPI.selectDirectory) {
+      const folder = await window.electronAPI.selectDirectory();
+      if (folder) {
+        document.getElementById('settingsDestDir').value = folder;
+      }
+    } else {
+      const current = document.getElementById('settingsDestDir').value;
+      const custom = prompt(state.currentLang === 'ar' ? 'حدد مسار حفظ التنزيلات على جهازك:' : 'Enter download destination path:', current);
+      if (custom) document.getElementById('settingsDestDir').value = custom;
+    }
+  }
+
+  async function saveAppSettings() {
+    const maxConcurrentDownloads = parseInt(document.getElementById('settingsConcurrency').value, 10);
+    const downloadDir = document.getElementById('settingsDestDir').value;
+    const defaultLanguage = document.getElementById('settingsLang').value;
+    const retentionDays = parseInt(document.getElementById('settingsRetention').value, 10);
+
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ maxConcurrentDownloads, downloadDir, defaultLanguage, retentionDays }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(state.currentLang === 'ar' ? 'تم حفظ الإعدادات بنجاح' : 'Settings saved successfully');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // Health and Background loop
+  async function checkServerHealth() {
+    try {
+      const res = await fetch(`${window.API_BASE_URL}/health`);
+      const data = await res.json();
+      if (data.status === 'healthy') {
+        document.getElementById('backendHealthText').textContent = i18n[state.currentLang].status_connected;
+      }
+    } catch {
+      document.getElementById('backendHealthText').textContent = 'Connecting...';
+    }
+  }
+
+  // Initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    switchLanguage(state.currentLang);
+    setupNavigation();
+    renderStagesGrid();
+    checkServerHealth();
+    fetchQueue();
+    fetchHistory();
+
+    // Start background queue polling
+    state.pollTimer = setInterval(() => {
+      fetchQueue();
+    }, 2500);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "Video Downloader Pro",
+  "description": "Professional Windows desktop application & media processing dashboard for authorized video, playlist, and educational HLS/DASH streams.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
